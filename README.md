@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/threatgrid/ring-graphql-ui.svg?branch=master)](https://travis-ci.org/threatgrid/ring-graphql-ui)
+
 # Ring-Graphql-UI
 
 Provides GraphiQL UI for Ring apps.
