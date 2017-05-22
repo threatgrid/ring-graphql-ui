@@ -1,4 +1,4 @@
-# Ring-GraphiQL
+# GraphiQL
 Jar-packaged version of GraphiQL for ring-based clojure web-apps (and other JVM apps).
 
 The GraphiQL integration is based on [CustomGraphiQL](https://github.com/shahankit/custom-graphiql/).

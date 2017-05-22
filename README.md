@@ -1,14 +1,26 @@
-# ring-graphql-ui
+# Ring-Graphql-UI
 
-A Clojure library designed to ... well, that part is up to you.
+Provides GraphiQL UI for Ring apps.
 
 ## Usage
 
-FIXME
+The `wrap-graphiql` middleware will serve the GraphiQL UI
+
+```clojure
+(def app
+ (-> handler
+     (wrap-graphiql {:path "/graphiql"
+                     :endpoint "ctia/graphql"})))
+```
+
+It provides the following options:
+
+- `path`:The path for the GraphiQL UI
+- `endpoint`:The relative url of the GraphQL endpoint
 
 ## License
 
-Copyright © 2017 FIXME
+Copyright © 2015-2016 Cisco Systems
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Eclipse Public License v1.0
+

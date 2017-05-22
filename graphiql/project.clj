@@ -1,10 +1,9 @@
 (defproject threatgrid/graphiql "0.1.0-SNAPSHOT"
-  :description "GraphiQL UI"
+  :description "Jar-packaged version of GraphiQL"
   :url "https://github.com/threatgrid/ring-graphiql"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"
-            :distribution :repo
-            :comments "same as Clojure"}
+            :distribution :repo}
   :resource {:resource-paths ["ext/custom-graphiql" "resources/graphiql"]
              :target-path "target/resources/graphiql"
              :skip-stencil [ #".*" ]
