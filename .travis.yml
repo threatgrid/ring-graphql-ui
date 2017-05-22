@@ -4,6 +4,5 @@ script: lein do clean, test
 cache:
   directories:
   - $HOME/.m2
-script: lein test-all
 jdk:
   - oraclejdk8
