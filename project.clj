@@ -1,4 +1,4 @@
-(defproject threatgrid/ring-graphql-ui "0.1.0"
+(defproject threatgrid/ring-graphql-ui "0.1.1-SNAPSHOT"
   :description "GraphQL UI for Ring apps."
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"
