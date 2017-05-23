@@ -35,14 +35,12 @@
       (strip-js conf-property)
       (json/parse-string true)))
 
-(deftest graphiql-conf-js-test
-  (is (= {:endpoint "graphql"}
-         (read-js (sut/graphiql-conf-js {})
-                  "GRAPHIQL_CONF")))
+(deftest conf-js-test
   (is (= {:endpoint "ctia/graphql"}
          (read-js
-          (sut/graphiql-conf-js
-           {:endpoint "ctia/graphql"})
+          (sut/conf-js
+           {:endpoint "ctia/graphql"}
+           "GRAPHIQL_CONF")
           "GRAPHIQL_CONF"))))
 
 (defn http-get
@@ -80,4 +78,24 @@
                     (sut/wrap-graphiql {:path "/graphiql"
                                         :endpoint "ctia/graphql"}))]
     (is (html? (http-get handler "/graphiql/index.html")))
+    (is (nil? (http-get handler "unknown")))))
+
+(deftest voyager-test
+  (let [handler (sut/voyager {:path "/voyager"
+                              :endpoint "ctia/graphql"})]
+    (testing "index.html"
+      (is (redirect? (http-get handler "/voyager")))
+      (is (html? (http-get handler "/voyager/index.html"))))
+    (testing "conf.js"
+      (let [conf-response (http-get handler "/voyager/conf.js")]
+        (is (javascript? conf-response))
+        (is (= {:endpoint "ctia/graphql"}
+               (read-js (:body conf-response)
+                        "GRAPHQL_VOYAGER_CONF")))))))
+
+(deftest wrap-voyager-test
+  (let [handler (-> (constantly nil)
+                    (sut/wrap-graphiql {:path "/voyager"
+                                        :endpoint "ctia/graphql"}))]
+    (is (html? (http-get handler "/voyager/index.html")))
     (is (nil? (http-get handler "unknown")))))

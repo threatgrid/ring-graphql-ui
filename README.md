@@ -2,25 +2,40 @@
 
 # Ring-Graphql-UI
 
-Provides GraphiQL UI for Ring apps.
+GraphQL UI for Ring apps:
+
+- [GraphiQL](https://github.com/shahankit/custom-graphiql/) based on [CustomGraphiQL]()
+- [GraphQL Voyager](https://github.com/APIs-guru/graphql-voyager)
 
 ## Usage
 
-The `wrap-graphiql` middleware will serve the GraphiQL UI
+The `wrap-graphiql` middleware serves the GraphiQL UI and `wrap-voyager` serves the GraphQL Voyager UI.
 
 ```clojure
 (def app
  (-> handler
      (wrap-graphiql {:path "/graphiql"
-                     :endpoint "ctia/graphql"})))
+                     :endpoint "/graphql"})
+     (wrap-voyager {:path "/voyager"
+                    :endpoint "/graphql"})))
 ```
 
-It provides the following options:
+They provides the following options:
 
-- `path`:The path for the GraphiQL UI
-- `endpoint`:The relative url of the GraphQL endpoint
+- `path`:The path to the GraphiQL or GraphQL Voyager UI
+- `endpoint`:The GraphQL endpoint URL
 
 ## License
+
+### CustomGraphiQL
+
+shahankit/custom-graphiql is licensed under the [MIT License](https://github.com/shahankit/custom-graphiql/blob/master/LICENSE)
+
+### GraphQL Voyager
+
+APIs-guru/graphql-voyager is licensed under the [MIT License](https://github.com/APIs-guru/graphql-voyager/blob/master/LICENSE)
+
+### Ring-Graphql-UI
 
 Copyright © 2015-2016 Cisco Systems
 
