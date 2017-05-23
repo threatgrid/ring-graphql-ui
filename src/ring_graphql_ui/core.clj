@@ -25,7 +25,7 @@
    root: The root directory in the resource folder containing static files
    conf-js-fn: Fn that generates the js configuration file as a string"
   [{:keys [path root] :as options}
-   conf-js-fn]
+   conf-js]
   (let [f (fn [{request-uri :uri :as req}]
             (let [;; Prefix path with servlet-context and compojure context
                   uri (join-paths (:context req) path)]
@@ -33,7 +33,7 @@
               (when-let [req-path (get-path uri request-uri)]
                 (condp = req-path
                   "" (http-response/found (join-paths request-uri "index.html"))
-                  "conf.js" (http-response/content-type (http-response/ok (conf-js-fn options)) "application/javascript")
+                  "conf.js" (http-response/content-type (http-response/ok conf-js) "application/javascript")
                   (http-response/resource-response (str root "/" req-path))))))]
     (fn
       ([request]
@@ -51,29 +51,37 @@
        ([request]
         ((some-fn ui handler) request))))))
 
-;;------- GraphiQL
-
-(defn graphiql-conf-js
+(defn conf-js
   "Generates GraphiQL js conf file as a string"
-  [opts]
+  [opts js-prop]
   (let [endpoint (:endpoint opts "graphql")
         conf (-> opts
                  (dissoc :root :path)
                  (assoc :endpoint endpoint))]
-    (str "window.GRAPHIQL_CONF = " (json/generate-string conf) ";")))
+    (str "window."
+         js-prop
+         " = " (json/generate-string conf) ";")))
+
+(defn- serve-ui
+  [default-options options js-prop]
+  (let [opts (into default-options
+                   options)]
+    (-> (serve opts
+               (conf-js opts js-prop))
+        (content-type/wrap-content-type options)
+        (not-modified/wrap-not-modified)
+        (head/wrap-head))))
+
+;;------- GraphiQL
 
 (defn graphiql
   "Returns a Ring handler which can be used to serve GraphiQL"
   ([] (graphiql {}))
   ([options]
-   {:pre [(map? options)]}
-   (-> (serve (into {:path "/graphiql"
-                     :root "graphiql"}
-                    options)
-              graphiql-conf-js)
-       (content-type/wrap-content-type options)
-       (not-modified/wrap-not-modified)
-       (head/wrap-head))))
+   (serve-ui {:path "/graphiql"
+              :root "graphiql"}
+             options
+             "GRAPHIQL_CONF")))
 
 (defn wrap-graphiql
   "Middleware to serve GraphiQL."
@@ -81,3 +89,21 @@
    (wrap-ui handler graphiql))
   ([handler options]
    (wrap-ui handler graphiql options)))
+
+;;-------- GraphQL Voyager
+
+(defn voyager
+  "Returns a Ring handler which can be used to serve GraphQL Voyager"
+  ([] (graphiql {}))
+  ([options]
+   (serve-ui {:path "/voyager"
+              :root "graphql-voyager"}
+             options
+             "GRAPHQL_VOYAGER_CONF")))
+
+(defn wrap-voyager
+  "Middleware to serve GraphQL Voyager."
+  ([handler]
+   (wrap-ui handler voyager))
+  ([handler options]
+   (wrap-ui handler voyager options)))
