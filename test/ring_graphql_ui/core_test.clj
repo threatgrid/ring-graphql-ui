@@ -99,3 +99,23 @@
                                         :endpoint "ctia/graphql"}))]
     (is (html? (http-get handler "/voyager/index.html")))
     (is (nil? (http-get handler "unknown")))))
+
+(deftest playground-test
+  (let [handler (sut/playground {:path "/playground"
+                                 :endpoint "ctia/graphql"})]
+    (testing "index.html"
+      (is (redirect? (http-get handler "/playground")))
+      (is (html? (http-get handler "/playground/index.html"))))
+    (testing "conf.js"
+      (let [conf-response (http-get handler "/playground/conf.js")]
+        (is (javascript? conf-response))
+        (is (= {:endpoint "ctia/graphql"}
+               (read-js (:body conf-response)
+                        "GRAPHQL_PLAYGROUND_CONF")))))))
+
+(deftest wrap-playground-test
+  (let [handler (-> (constantly nil)
+                    (sut/wrap-graphiql {:path "/playground"
+                                        :endpoint "ctia/graphql"}))]
+    (is (html? (http-get handler "/playground/index.html")))
+    (is (nil? (http-get handler "unknown")))))

@@ -94,7 +94,7 @@
 
 (defn voyager
   "Returns a Ring handler which can be used to serve GraphQL Voyager"
-  ([] (graphiql {}))
+  ([] (voyager {}))
   ([options]
    (serve-ui {:path "/voyager"
               :root "graphql-voyager"}
@@ -107,3 +107,21 @@
    (wrap-ui handler voyager))
   ([handler options]
    (wrap-ui handler voyager options)))
+
+;;-------- GraphQL Playground
+
+(defn playground
+  "Returns a Ring handler which can be used to serve GraphQL Playground https://github.com/prisma-labs/graphql-playground#as-html-page"
+  ([] (playground {}))
+  ([options]
+   (serve-ui {:path "/playground"
+              :root "graphql-playground"}
+             options
+             "GRAPHQL_PLAYGROUND_CONF")))
+
+(defn wrap-playground
+  "Middleware to serve GraphQL Playground."
+  ([handler]
+   (wrap-ui handler playground))
+  ([handler options]
+   (wrap-ui handler playground options)))
