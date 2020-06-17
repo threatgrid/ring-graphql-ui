@@ -6,10 +6,11 @@ GraphQL UI for Ring apps:
 
 - [GraphiQL](https://github.com/shahankit/custom-graphiql/) based on [CustomGraphiQL]()
 - [GraphQL Voyager](https://github.com/APIs-guru/graphql-voyager)
+- [Graphql Playground](https://github.com/prisma-labs/graphql-playground)
 
 ## Usage
 
-The `wrap-graphiql` middleware serves the GraphiQL UI and `wrap-voyager` serves the GraphQL Voyager UI.
+The `wrap-graphiql` middleware serves the GraphiQL UI, `wrap-voyager` serves the GraphQL Voyager UI and the `wrap-playground` serves the Graphql playground UI .
 
 ```clojure
 (def app
@@ -17,7 +18,9 @@ The `wrap-graphiql` middleware serves the GraphiQL UI and `wrap-voyager` serves 
      (wrap-graphiql {:path "/graphiql"
                      :endpoint "/graphql"})
      (wrap-voyager {:path "/voyager"
-                    :endpoint "/graphql"})))
+                    :endpoint "/graphql"})
+     (wrap-playground {:path "/playground"
+                       :endpoint "/graphql"})))
 ```
 
 They provides the following options:
@@ -34,6 +37,10 @@ shahankit/custom-graphiql is licensed under the [MIT License](https://github.com
 ### GraphQL Voyager
 
 APIs-guru/graphql-voyager is licensed under the [MIT License](https://github.com/APIs-guru/graphql-voyager/blob/master/LICENSE)
+
+### GraphQL Playground
+
+prisma-labs/graphql-playground is licensed under the [MIT License](https://github.com/prisma-labs/graphql-playground/blob/master/LICENSE)
 
 ### Ring-Graphql-UI
 
